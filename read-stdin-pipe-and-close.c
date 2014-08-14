@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     int pid;
     int fd[2];
 
-	pipe(fd);
+    pipe(fd);
+
     if ((pid = fork()) == 0) {
         fprintf(stderr, "Child started!\n");
 
