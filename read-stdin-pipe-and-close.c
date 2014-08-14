@@ -35,11 +35,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Child started!\n");
 
         // Make the read side of the pipe our stdin.
+        // The write side will be closed by the parent process.
         close(fd[1]);
         close(0);
         dup(fd[0]);
 
-        // Read from the pipe.
+        // Create a stream that reads from the pipe.
         uv_pipe_t stdin_pipe;
 
         r = uv_pipe_init(uv_default_loop(), (uv_pipe_t*)&stdin_pipe, 0);
@@ -51,9 +52,10 @@ int main(int argc, char *argv[])
         r = uv_read_start((uv_stream_t *)&stdin_pipe, alloc_buffer, read_stdin);
         assert(r == 0);
 
-  		uv_run(uv_default_loop(), UV_RUN_DEFAULT);
-
-        fprintf(stderr, "Event loop exited!\n");
+        // Because the other end of the pipe was closed, there should
+        // be no event left to process after one run of the event loop.
+        // Otherwise, it means that events were not processed correctly.
+        assert(uv_run(uv_default_loop(), UV_RUN_NOWAIT) == 0);
     } else {
         fprintf(stderr, "Parent!\n");
 
