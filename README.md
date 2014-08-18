@@ -1,4 +1,4 @@
-This repository is simple reproduction of joyent/libuv's issue joyent/libuv#1419.
+This repository is simple reproduction of [joyent/libuv](https://github.com/joyent/libuv/)'s issue [joyent/libuv#1419](https://github.com/joyent/libuv/issues/1419).
 
 How to build it?
 ================
